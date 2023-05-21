@@ -1,0 +1,157 @@
+body {
+  background-color: #2C3E50;
+  color: #FFFFFF;
+}
+
+.container {
+  background-color: #34495E;
+  max-width: 400px;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group label {
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.btn-primary {
+  background-color: #3498DB;
+  border-color: #3498DB;
+}
+
+.btn-primary:hover {
+  background-color: #1E8BC3;
+  border-color: #1E8BC3;
+}
+
+.login-link {
+  font-size: 14px;
+  color: #FFFFFF;
+}
+
+.login-link a {
+  color: #3498DB;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animated-fadeIn {
+  animation: fadeIn 1s;
+}
+
+
+
+.navbar {
+  background-color: #34495E;
+}
+
+.navbar-brand {
+  color: #FFFFFF;
+}
+
+.form-control {
+  background-color: #34495E;
+  color: #FFFFFF;
+  border-color: #3498DB;
+}
+
+.sidebar {
+  background-color: #405a74;
+  color: #FFFFFF;
+}
+
+.file-list {
+  background-color: #34495E;
+  color: #FFFFFF;
+}
+
+.file-list .list-group-item {
+  background-color: #2C3E50;
+  border-color: #FFFFFF;
+}
+
+.file-list .list-group-item:hover {
+  background-color: #2C3E50;
+}
+
+
+.upload-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #2C3E50;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px #2C3E50;
+}
+
+.upload-form label {
+  font-weight: bold;
+}
+
+.upload-form input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.upload-form button[type="submit"] {
+  width: 100%;
+}
+
+
+
+.card {
+  background-color: #34495E;
+  color: #FFFFFF;
+}
+
+.card-title {
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+
+.sidebar-card {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.sidebar-card .card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.sidebar-card p {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.sidebar-card ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-card li {
+  font-size: 14px;
+  margin-bottom: 5px;
+}

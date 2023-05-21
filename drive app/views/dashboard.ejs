@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drive Application Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+  <style>
+    .sidebar {
+      max-height: calc(100vh - 56px); /* Adjust the height based on your needs */
+      overflow-y: auto;
+    }
+
+    .file-info {
+      max-height: calc(100vh - 56px); /* Adjust the height based on your needs */
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark">
+    <a class="navbar-brand" href="#">Drive Application</a>
+    <form class="form-inline">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </nav>
+
+  <div class="container-fluid">
+    <br>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="card sidebar">
+              <div class="card-body">
+                <h4 class="card-title">Filters</h4>
+                <!-- Add your sidebar content here -->
+                <div class="file-list">
+                  <div class="list-group">
+                    <% labels.forEach((label)=> { %>
+                        <div>
+                          <%= label %>
+                        </div>
+                      <% }) %>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+      <div class="col-md-7">
+        <div class="upload-form">
+          <form enctype="multipart/form-data" method="POST" action="/file/upload">
+            <div class="form-group">
+              <label for="fileUpload">Upload File:</label>
+              <input type="file" class="form-control-file" name="file" id="fileUpload">
+            </div>
+            <button type="submit" class="btn btn-primary" >Upload</button>
+          </form>
+          </div>
+          <br>
+          <h2 class="text-center">File List</h2>
+        <div class="file-list">
+          <div class="list-group">
+            <% files.forEach(function(file) { %>
+              <a href="#" class="list-group-item list-group-item-action">
+                <%= file.name %>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card file-info">
+          <div class="card-body">
+            <h4 class="card-title">File Info</h4>
+            <!-- Add your card content here -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
