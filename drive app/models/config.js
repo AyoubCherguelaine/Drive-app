@@ -13,7 +13,7 @@ var ModelApi = axios.create({
 
 var ClassifierApi = axios.create({
     baseURL: classsifier,
-    timeout: 100000,
+    timeout: 500000,
 });
 
 var CloudApi = axios.create({

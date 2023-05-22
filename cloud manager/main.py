@@ -22,9 +22,11 @@ async def upload_file(UserPath:str,file: UploadFile = File(...)):
     # Create the new filename with the timestamp
     filename, ext = os.path.splitext(file.filename)
     new_filename = f"{filename}_{timestamp}{ext}"
-    print(new_filename)
+    
     # Save the file to disk
+    
     upload_dir = get_upload_dir()
+    print(upload_dir,new_filename)
     with open(os.path.join(upload_dir, new_filename), "wb") as f:
         f.write(await file.read())
     print("greaat new_filename")
@@ -48,6 +50,6 @@ async def download_file():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app,  port=4001)
+    uvicorn.run(app,  port=4003)
 
 

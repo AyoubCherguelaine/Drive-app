@@ -22,6 +22,8 @@ const upload = multer({ storage });
 
 // Use the upload middleware in your route handler
 router.post('/file/upload', upload.single('file'), (req, res) => {
+
+  let id_user = "6462974d0a674ecf39e8320f"
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
@@ -32,12 +34,37 @@ router.post('/file/upload', upload.single('file'), (req, res) => {
   // Perform additional operations with the uploaded file
   path_file = filePath
 
-  file.sendFileCloud("ayoub",path_file,(err,data)=>{
+  file.sendFileCloud(id_user,path_file,(err,cloud_data)=>{
     if(err){
 // Send a response with the uploaded file details
-    res.json(data);
+    
+      
+    file.classifieFile(id_user,path_file,(err,classifieData)=>{
+      if(err){
+        res.send({"cloud":cloud_data,"classifer":classifieData})
+        file_body = {
+          name : "filename",
+          path : cloud_data.dr_path+"/"+ cloud_data.filename,
+          label : classifieData.label,
+          language :classifieData.language,
+          id_user :id_user
+        }
+        file.createFile(file_body,(err,result)=>{
+          if(err){
+            deleteUploadedFile(path_file)
+            res.redirect("/dashboad")
+          }else{
+            console.log(result)
+            res.json(result)
+          }
+        })
+      }else{
+        res.json(classifieData)
+      }
+    })
+
     }else{
-      res.json(data)
+      res.json(cloud_data)
     }
   })
 

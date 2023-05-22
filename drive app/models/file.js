@@ -32,7 +32,7 @@ class file{
 
               }).catch((err)=>{
 
-                callback(fasle,err)
+                callback(false,err)
               })
 
         }
@@ -71,7 +71,17 @@ static async delete(id_file,callback){
     }
 
     static share(id_file,id_user){
+      if(! id_file || ! id_user){
+        callback(false,null)
+      }else{
+        let url = `/user/${id_user}/share/${id_file}`
+        ModelApi.get(url).then((res)=>{
+          callback(true,null)
+        }).catch((err)=>{
 
+          callback(false,err)
+        })
+      }
     }
 }
 
@@ -79,11 +89,16 @@ const createFile = async (body,callback)=>{
     const {name, path, label, language, id_user} = body
     if(name && path && label && language && id_user){
         const newFile = new file(name, path, label, language, id_user)
-        newFile.save(async (result,file)=>{
-            if(result){
-                callback(true,newFile)
+        newFile.save(async (err,result)=>{
+            if(err){
+              file.share(result["_id"],id_user,(err,r)=>{
+                if(err){
+                  callback(true,result)
+                }
+              })
+                
             }else{
-                callback(false,file)
+                callback(false,result)
             }
         })
     }else{
@@ -198,7 +213,7 @@ const sendFileCloud = async (id, filePath,callback)=>{
 
 
 const classifieFile = async (id, filePath,callback)=>{
-    
+
     const url = `/classify`;
 
     try {
@@ -213,6 +228,7 @@ const classifieFile = async (id, filePath,callback)=>{
       }).then((res)=>{
           
         console.log(res.data);
+        
       callback(true,res.data)
 
        }).catch((err)=>{
@@ -234,5 +250,6 @@ module.exports = {
     createFile,
     getfiles,
     getLabel,
-    sendFileCloud
+    sendFileCloud,
+    classifieFile
 }
