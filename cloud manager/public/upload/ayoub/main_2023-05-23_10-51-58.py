@@ -45,7 +45,7 @@ class pathPost(BaseModel):
 
 @app.post("/download/")
 async def download_file(path:pathPost):
-    return download.download_file(path.path)
+    return download.download_file()
 
 
 if __name__ == "__main__":

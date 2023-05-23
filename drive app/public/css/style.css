@@ -123,3 +123,43 @@ body {
   font-size: 14px;
   margin-bottom: 5px;
 }
+
+.file-card {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #252526;
+  border: 1px solid #333;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.file-details {
+  flex: 1;
+  margin-left: 10px;
+}
+
+.file-name {
+  font-weight: bold;
+  color: #d4d4d4;
+}
+
+.file-label {
+  color: #d4d4d4;
+  margin-top: 5px;
+}
+
+.file-id {
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.info-button {
+  background-color: #4CAF50;
+  color: #d4d4d4;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}

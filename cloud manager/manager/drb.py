@@ -19,13 +19,37 @@ async def upload_file(local_path,dr_path):
     return  response.path_display
 
 
-def download_file(local_path,dr_path):
-    # Path to the file you want to download from Dropbox
-    # Download the file from Dropbox
-    _, res = dbx.files_download(dropbox_path)
-    data = res.content
-    with open(local_path, "wb") as f:
-        f.write(data)
+def lag(text):
+    l = text.split('/')
 
-    print("File downloaded from Dropbox: ", local_path)
+    return l[2]
+
+def download_file(local_directory, dr_path):
+    # Create a Dropbox client object using the access token
+
+
+    try:
+        # Download the file from Dropbox
+        _, res = dbx.files_download(dr_path)
+        data = res.content
+
+        # Check if the local directory exists
+        if not os.path.exists(local_directory):
+            # Create the local directory
+            os.makedirs(local_directory)
+
+        # Get the filename from the Dropbox path
+        filename = os.path.basename(lag(dr_path))
+
+        # Construct the full local path
+        local_path = os.path.join(local_directory, filename)
+
+        # Write the downloaded data to the local file
+        with open(local_path, "wb") as f:
+            f.write(data)
+
+        print("File downloaded from Dropbox:", local_path)
+    except dropbox.exceptions.ApiError as e:
+        print(f"Error downloading file from Dropbox: {e}")
+
 

@@ -23,7 +23,7 @@ async def getusers(ids:user.ids):
     return User.get_users_by_ids(ids)
 
 @router.get("/{id}/share/{id_file}")
-async def chareAfile():
+async def chareAfile(id:str,id_file:str):
     return User.addFile(id, id_file)
     
 

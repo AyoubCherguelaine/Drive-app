@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Custom CSS -->
   <link rel="stylesheet" href="/css/style.css">
-  
+  <script src="/js/js.js"></script>
 
   <style>
     .sidebar {
@@ -66,9 +66,16 @@
         <div class="file-list">
           <div class="list-group">
             <% files.forEach(function(file) { %>
-              <a href="#" class="list-group-item list-group-item-action">
-                <%= file.name %>
-              </a>
+              
+              <div class="file-card">
+                <div class="file-details">
+                  <div class="file-name"><%= file.name %></div>
+                  <div class="file-label"><%= file.label %></div>
+                  <div class="file-id"><%= file._id %></div>
+                </div>
+                <button class="info-button"  onclick="showFileInfo('<%= file._id %>')">Info</button>
+              </div>
+
             <% }) %>
           </div>
         </div>
@@ -78,7 +85,9 @@
         <div class="card file-info">
           <div class="card-body">
             <h4 class="card-title">File Info</h4>
-            <!-- Add your card content here -->
+            <div id="fileInfoContent">
+              <!-- File info will be displayed here -->
+            </div>
           </div>
         </div>
       </div>

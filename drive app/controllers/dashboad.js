@@ -41,10 +41,10 @@ router.post('/file/upload', upload.single('file'), (req, res) => {
       
     file.classifieFile(id_user,path_file,(err,classifieData)=>{
       if(err){
-        res.send({"cloud":cloud_data,"classifer":classifieData})
+        //res.send({"cloud":cloud_data,"classifer":classifieData})
         file_body = {
-          name : "filename",
-          path : cloud_data.dr_path+"/"+ cloud_data.filename,
+          name : filename,
+          path : cloud_data.path,
           label : classifieData.label,
           language :classifieData.language,
           id_user :id_user
@@ -108,7 +108,7 @@ router.get("/dashboard", (req, res) => {
           };
           files = []; // Reset files to an empty array
         }
-        
+        console.log(files)
         res.render("dashboard", { files, Err: pack,labels:labels });
       });
     }else{

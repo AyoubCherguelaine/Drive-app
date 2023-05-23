@@ -5,7 +5,6 @@ const socketIO = require('socket.io');
 const session = require('express-session');
 
 
-
 const sokectfunctions = require("./controllers/socket")
 const auth = require("./controllers/Auth")
 const dashboard = require("./controllers/dashboad")
@@ -40,20 +39,6 @@ app.use(dashboard)
 
 
 
-// // Handle incoming socket connections
-// io.on('connection', (socket) => {
-//   console.log('A client connected');
-
-//     // Handle 'file-upload' event from the client
-//     socket.on('file-upload',sokectfunctions.UploadFile)
-
-
-//   // Handle socket disconnection
-//   socket.on('disconnect', () => {
-//     console.log('A client disconnected');
-//   });
-
-// })
 
 // Start the server
 const PORT = 3001;
