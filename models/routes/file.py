@@ -1,45 +1,55 @@
 from fastapi import APIRouter
+
 from models import files
-from models.files import file,filePost
-from models.user import User, ids
+from models.files import File, FilePost
+from models.user import User, Ids
 
 router = APIRouter()
 
+
 @router.post("/create")
-async def createFile(filePost:filePost):
-    d_f = files.to_dict(filePost)
-    
-    f = file(d_f)
-    
-    f.save()
-    return f.dictionary()
+async def create_file(file_post: FilePost):
+    print(file_post)
+    file_dict = files.to_dict(file_post)
+    f = File(file_dict)
+    print(f.dictionary())
+    ret= f.save()
+    print(ret)
+    return ret
+
 
 @router.get("/")
-async def getAll():
-    return file.get_all(None)
+async def get_all_files():
+    return File.get_all(None)
+
 
 @router.post("/")
-async def getAll(filter:filePost):
-    return file.get_all(filter)
+async def get_files(filter: FilePost):
+    return File.get_all(filter)
+
 
 @router.get("/{id}/delete")
-async def deleteFile(id:str):
-    return file.delete(id)
+async def delete_file(id: str):
+    return File.delete(id)
 
 
 @router.get('/isFileAllow/{id_user}/{id_file}')
-async def isFileAllow(id_user:str,id_file:str):
+async def is_file_allow(id_user: str, id_file: str):
     return User.isFileAllow(id_user, id_file)
 
+
 @router.get('/fileinfo/{id}')
-async def fileInfo(id:str):
-    fileInfo = file.getOne(id)
-    users = file.getUserInFile((id))
+async def file_info(id: str):
+    file_info = File.get_one(id)
+    users = File.get_user_in_file(id)
     return {
-        "file":fileInfo,
-        "users":users
+        "file": file_info,
+        "users": users
     }
-    
+
+
 @router.post("/ids")
-async def filesIds(ids:ids):
-    return file.get_files_by_ids(ids)
+async def get_files_by_Ids(Ids: Ids):
+    print(type(Ids.ids))
+    
+    return File.get_files_by_ids(Ids)

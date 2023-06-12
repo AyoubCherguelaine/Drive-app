@@ -1,8 +1,9 @@
 const axios = require('axios');
-const {ModelApi,ClassifierApi,CloudApi} = require("./config")
-const auth = require('./Auth')
+const { ModelApi, ClassifierApi, CloudApi } = require('./config');
+const auth = require('./Auth');
 const FormData = require('form-data');
 const fs = require('fs');
+
 
 class file{
     constructor(name, path, label, language, id_user) {
@@ -13,64 +14,50 @@ class file{
         this.id_user = id_user;
       }
 
-    async save(callback) {
-        if( !this.name || !this.path || !this.label || !this.language || !this.id_user  ){
-            callback(false, "Missing Data")
-        }else{
-            let fileData = {
-                name: this.name,
-                path: this.path,
-                label: this.label,
-                language: this.language,
-                id_user: this.id_user
+      async save(callback) {
+        if (!this.name || !this.path || !this.label || !this.language || !this.id_user) {
+          callback(false, 'Missing Data');
+        } else {
+          const fileData = {
+            name: this.name,
+            path: this.path,
+            label: this.label,
+            language: this.language,
+            id_user: this.id_user,
+          };
+          const url = '/file/create';
+      
+          try {
+            const res = await ModelApi.post(url, fileData);
+            callback(true, res.data);
+          } catch (err) {
+            callback(false, err);
+          }
+        }
+      }
+      
+      static async delete(id_file, callback) {
+        if (!id_file) {
+          callback(false, 'Missing Data');
+        } else {
+          const url = `/file/${id_file}/delete`;
+      
+          try {
+            const res = await ModelApi.get(url);
+            const { data } = res;
+            if (data.result === true) {
+              callback(true, null);
+            } else {
+              callback(false, 'API operation');
             }
-            let url= "/file/create"
-
-            ModelApi.post(url,fileData).then((res)=>{
-
-                callback(true,res.data)
-
-              }).catch((err)=>{
-
-                callback(false,err)
-              })
-
+          } catch (err) {
+            callback(false, err);
+          }
         }
-    }
+      }
+      
 
-static async delete(id_file,callback){
-        if(! id_file){
-            callback(false, "Missing Data")
-        }else{
-
-        
-        let url= '/file/'+id_file+"/delete"
-
-            ModelApi.get(url).then((res)=>{
-
-                // shape {"result":True}
-        const { data } = res;
-        if(data.result == true){
-            callback(true,null)
-        }else{
-            callback(false,"api operation")
-        }
-
-              }).catch((err)=>{
-
-                callback(fasle,err)
-              })
-        // shape {"result":True}
-        const { data } = response;
-        if(data.result == true){
-            callback(true,null)
-        }else{
-            callback(false,"api operation")
-        }
-        }
-    }
-
-    static share(id_file,id_user){
+    static share(id_file,id_user, callback){
       if(! id_file || ! id_user){
         callback(false,null)
       }else{
@@ -84,27 +71,26 @@ static async delete(id_file,callback){
       }
     }
 }
+const createFile = async (body, callback) => {
+  const { name, path, label, language, id_user } = body;
+  if (name && path && label && language && id_user) {
+    const newFile = new file(name, path, label, language, id_user);
+    newFile.save(async (err, result) => {
+      if (err) {
+        file.share(result['_id'], id_user, (err, r) => {
+          if (err) {
+            callback(true, result);
+          }
+        });
+      } else {
+        callback(false, result);
+      }
+    });
+  } else {
+    callback(false, 'Missing Data');
+  }
+};
 
-const createFile = async (body,callback)=>{
-    const {name, path, label, language, id_user} = body
-    if(name && path && label && language && id_user){
-        const newFile = new file(name, path, label, language, id_user)
-        newFile.save(async (err,result)=>{
-            if(err){
-              file.share(result["_id"],id_user,(err,r)=>{
-                if(err){
-                  callback(true,result)
-                }
-              })
-                
-            }else{
-                callback(false,result)
-            }
-        })
-    }else{
-        callback(false,"Missing Data")
-    }
-}
 
 const deleteFile = async (id_file,callback)=>{
 
@@ -151,12 +137,19 @@ const getfiles = async (id_user,callback)=>{
         let body = {
             "ids":  files
           }
+          const jsonString = JSON.stringify(body);
+        console.log(jsonString);
+        
+          
         ModelApi.post(url,body).then((res)=>{
           
             callback(true,res.data)
+            
            }).catch((err)=>{
 
-             callback(false,err)
+             
+             callback(false,null)
+              
            })
 
       }).catch((err)=>{
@@ -181,67 +174,47 @@ const getLabel = async (callback)=>{
        })
 
 }
+const sendFileCloud = async (id, filePath, callback) => {
+  const url = `/upload/${id}`;
 
-const sendFileCloud = async (id, filePath,callback)=>{
-    const url = `/upload/${id}`;
+  try {
+    const form = new FormData();
+    form.append('file', fs.createReadStream(filePath));
 
-    try {
-      const form = new FormData();
-      form.append('file', fs.createReadStream(filePath));
-        
-      await CloudApi.post(url, form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          ...form.getHeaders(),
-        },
-      }).then((res)=>{
-          
-        console.log(res.data);
-      callback(true,res.data)
+    const res = await CloudApi.post(url, form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        ...form.getHeaders(),
+      },
+    });
+    callback(true, res.data);
+  } catch (err) {
+    callback(false, err);
+  }
+};
 
-       }).catch((err)=>{
+const classifieFile = async (id, filePath, callback) => {
+  const url = `/classify`;
 
-         callback(false,err)
-       })
-  
-      
-    } catch (error) {
-      console.error(error);
-      callback(false,error)
-    }
-}
+  try {
+    const form = new FormData();
+    form.append('file', fs.createReadStream(filePath));
+
+    const res = await ClassifierApi.post(url, form, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        ...form.getHeaders(),
+      },
+    });
+    callback(true, res.data);
+  } catch (err) {
+    callback(false, err);
+  }
+};
 
 
-const classifieFile = async (id, filePath,callback)=>{
 
-    const url = `/classify`;
 
-    try {
-      const form = new FormData();
-      form.append('file', fs.createReadStream(filePath));
-        
-      await ClassifierApi.post(url, form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          ...form.getHeaders(),
-        },
-      }).then((res)=>{
-          
-        console.log(res.data);
-        
-      callback(true,res.data)
-
-       }).catch((err)=>{
-
-         callback(false,err)
-       })
-  
-      
-    } catch (error) {
-      console.error(error);
-      callback(false,error)
-    }
-}
 
 
 module.exports = {

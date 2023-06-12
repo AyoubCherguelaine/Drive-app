@@ -51,8 +51,8 @@ router.post("/login",(req,res)=>{
                     let id= data["_id"]
                    let name = data["name"]
 
-                   req.session.id = id;
-                   req.session.name = name
+                    req.session.id = id;
+                    req.session.name = name
                     res.redirect("/dashboad")
                    
                 }else{

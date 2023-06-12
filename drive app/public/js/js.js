@@ -40,7 +40,8 @@ async function showFileInfo(fileId) {
         <ul>
           ${otherUsers.map(user => `<li>${user.name}</li>`).join('')}
         </ul>
-        <
+        
+        
       `;
         })
         .catch(error => {

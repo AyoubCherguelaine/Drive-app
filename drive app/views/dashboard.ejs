@@ -56,11 +56,14 @@
           <form enctype="multipart/form-data" method="POST" action="/file/upload">
             <div class="form-group">
               <label for="fileUpload">Upload File:</label>
-              <input type="file" class="form-control-file" name="file" id="fileUpload">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" name="file" id="fileUpload">
+                <label class="custom-file-label" for="fileUpload">Choose file</label>
+              </div>
             </div>
-            <button type="submit" class="btn btn-primary" >Upload</button>
+            <button type="submit" class="btn btn-primary">Upload</button>
           </form>
-          </div>
+        </div>
           <br>
           <h2 class="text-center">File List</h2>
         <div class="file-list">
