@@ -18,8 +18,12 @@ const storage = multer.diskStorage({
   },
 });
 
+
 // Set up multer upload instance
 const upload = multer({ storage });
+
+
+
 router.post('/file/upload', (req, res, next) => {
   const upload = multer({
     storage: diskStorage({
@@ -84,6 +88,81 @@ router.post('/file/upload', (req, res, next) => {
 });
 
 
+const uploadFile = (req,res)=>{
+  const upload = multer({
+    storage: diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Destination folder for uploaded files
+      },
+      filename: (req, file, cb) => {
+        cb(null, file.originalname); // Use the original filename without appending the timestamp
+      },
+    }),
+  }).single('file');
+
+  upload(req, res, (err) => {
+    // Handle multer upload middleware
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: err.message });
+    } else if (err) {
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    // Continue with the rest of the route handler
+    let id_user = '6462974d0a674ecf39e8320f';
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Access uploaded file properties
+    const { filename, path: filePath, mimetype } = req.file;
+
+    // Perform additional operations with the uploaded file
+    const path_file = filePath;
+
+    file.sendFileCloud(id_user, path_file, (err, cloud_data) => {
+      if (err) {
+        res.json({"id_user":id_user,
+                  "path_file":path_file,
+                  "CloudPath":cloud_data.path})
+      } else {
+        res.json(cloud_data);
+      }
+    });
+  });
+}
+
+const classifier = (req,res)=>{
+
+  file.classifieFile(id_user, path_file, (err, classifieData) => {
+    if (err) {
+      const file_body = {
+        name: filename,
+        path: cloud_data.path,
+        label: classifieData.label,
+        language: classifieData.language,
+        id_user: id_user,
+      };
+      
+    } else {
+      res.json(classifieData);
+    }
+  });
+}
+
+const createFile = (req,res)=>{
+  file.createFile(file_body, (err, result) => {
+    if (err) {
+      deleteUploadedFile(path_file);
+      res.redirect('/dashboard');
+    } else {
+      console.log(result);
+      res.json(result);
+    }
+  });
+}
+
+
 // Function to delete the uploaded file
 const deleteUploadedFile = (filePath) => {
 
@@ -96,18 +175,23 @@ const deleteUploadedFile = (filePath) => {
   });
 };
 
-const isAuth= (req,next)=>{
+const isAuth= (req)=>{
   let ses = req.session
-
-  if(ses.id){
-    
+  console.log(ses)
+  if(ses.id_user){
+    return true;
+  }else{
+    return false;
   }
 
 }
 
 router.get('/dashboard', (req, res) => {
-  const id = '6462974d0a674ecf39e8320f';
-
+  if(!isAuth(req)){
+    res.redirect("/login")
+  }else{
+  const id = req.session.id_user;
+  const name = req.session.name
   file.getLabel((err, data) => {
     let labels = [];
     if (err) {
@@ -117,13 +201,13 @@ router.get('/dashboard', (req, res) => {
           error: err ? false : true,
           message: err ? 'ok!' : files,
         };
-        console.log(files)
-        files.reverse();
+        
+        // files.reverse();
         res.render('dashboard', { files: files, Err: pack, labels: labels });
       });
     }
   });
-});
+}});
 
 
 

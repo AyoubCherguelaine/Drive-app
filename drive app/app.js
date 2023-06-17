@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 const session = require('express-session');
 
 
-const sokectfunctions = require("./controllers/socket")
+
 const auth = require("./controllers/Auth")
 const dashboard = require("./controllers/dashboad")
 

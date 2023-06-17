@@ -138,7 +138,7 @@ const getfiles = async (id_user,callback)=>{
             "ids":  files
           }
           const jsonString = JSON.stringify(body);
-        console.log(jsonString);
+       
         
           
         ModelApi.post(url,body).then((res)=>{

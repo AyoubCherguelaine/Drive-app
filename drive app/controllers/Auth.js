@@ -27,7 +27,7 @@ router.get("/login/error",(req,res)=>{
 
 router.post("/login",(req,res)=>{
     const { email, password } = req.body;
-    console.log(req.body)
+   
   // Perform data validation
     if (!email || !password) {
         let error = true;
@@ -37,23 +37,26 @@ router.post("/login",(req,res)=>{
     }else{
 
         authModel.login(req.body,(err,data)=>{
+            
             if(!err){
                 let error = true;
                 let message = 'api problem contact admin';
                 res.redirect(`/login/error?error=${error}&message=${message}`)
             }else{
                 //{"state":False}
-                let {stat} = data
+                let {state} = data
                
-                if(stat){
+                if(state){
                     // auth
-
-                    let id= data["_id"]
+                   
+                let id= data["_id"]
                    let name = data["name"]
 
-                    req.session.id = id;
+                    
                     req.session.name = name
-                    res.redirect("/dashboad")
+                    req.session.id_user = id;
+                    
+                    res.redirect("/dashboard")
                    
                 }else{
                     // not auth
